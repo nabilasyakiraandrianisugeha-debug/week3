@@ -2,74 +2,58 @@
 #include <string>
 using namespace std;
 
-// Struct simpan data info mahasiswa
-struct mahasiswa {
+struct Mahasiswa {
     string nim;
     string nama;
-    string kehadiran;
+    float persentaseKehadiran;
 };
-
-// Struct untuk elemen list
-struct mhsList {
-    mahasiswa info;
-    mhsList* next;
-};
-
-// Struct untuk List
-struct List {
-    mhsList* first;
-};
-
-// Inisialisasi list kosong
-void createList(List &L) {
-    L.first = nullptr;
-}
-
-// Alokasi elemen baru
-mhsList* createNewElement(string nim, string nama, string kehadiran) {
-    mhsList* P = new mhsList;
-    P->info.nim = nim;
-    P->info.nama = nama;
-    P->info.kehadiran = kehadiran;
-    P->next = nullptr;
-    return P;
-}
-
-// Menambahkan elemen ke posisi terakhir
-void insertLast(List &L, mhsList* P) {
-    if (L.first == nullptr) {
-        L.first = P;
-    } else {
-        mhsList* Q = L.first;
-        while (Q->next != nullptr) {
-            Q = Q->next;
-        }
-        Q->next = P;
-    }
-}
-
-// Menampilkan isi list
-void printList(List L) {
-    mhsList* P = L.first;
-    while (P != nullptr) {
-        cout << "NIM       : " << P->info.nim << endl;
-        cout << "Nama      : " << P->info.nama << endl;
-        cout << "Kehadiran : " << P->info.kehadiran << endl;
-        cout << "-------------------------" << endl;
-        P = P->next;
-    }
-}
 
 int main() {
-    List L;
-    createList(L);
+    Mahasiswa mahasiswa[40];
     
-    // Input data mahasiswa
-    insertLast(L, createNewElement("103012500315", "Nabila", "100%"));
-    insertLast(L, createNewElement("103012500276", "Tsania", "100%"));
+    for (int i = 0; i < 40; i++) {
+        cin >> mahasiswa[i].nim >> mahasiswa[i].nama >> mahasiswa[i].persentaseKehadiran;
+    }
     
-    // Tampilkan isi list
-    printList(L);
+    cout << "\n=== DAFTAR MAHASISWA ===" << endl;
+    for (int i = 0; i < 40; i++) {
+        cout << i + 1 << " | " << mahasiswa[i].nim << " | " << mahasiswa[i].nama << " | " << mahasiswa[i].persentaseKehadiran << "%" << endl;
+    }
+    cout << "Total Mahasiswa: 40" << endl;
     
+    // PENCARIAN BERDASARKAN NIM
+    string cariNIM;
+    cout << "\nMasukkan NIM yang ingin dicari untuk di-update: ";
+    cin >> cariNIM;
+    
+    int idx = -1; 
+    for (int i = 0; i < 40; i++) {
+        if (mahasiswa[i].nim == cariNIM) {
+            idx = i;
+            break;
+        }
+    }
+    
+    if (idx != -1) {
+        cout << "\nData ditemukan!" << endl;
+        cout << "Nama Sekarang      : " << mahasiswa[idx].nama << endl;
+        cout << "Kehadiran Sekarang : " << mahasiswa[idx].persentaseKehadiran << "%" << endl;
+        
+        float kehadiranBaru;
+        cout << "\nMasukkan Persentase Kehadiran yang baru (%): ";
+        cin >> kehadiranBaru;
+        mahasiswa[idx].persentaseKehadiran = kehadiranBaru; 
+        cout << "Data berhasil diperbarui!" << endl;
+
+        cout << "\n=== DAFTAR MAHASISWA (SETELAH UPDATE) ===" << endl;
+        for (int i = 0; i < 40; i++) {
+            cout << i + 1 << " | " << mahasiswa[i].nim << " | " << mahasiswa[i].nama << " | " << mahasiswa[i].persentaseKehadiran << "%" << endl;
+        }
+        cout << "Total Mahasiswa: 40" << endl;
+    }
+    else {
+        cout << "\nMaaf, mahasiswa dengan NIM " << cariNIM << " tidak ditemukan." << endl;
+    }
+
     return 0;
 }
